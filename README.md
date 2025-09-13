@@ -1,6 +1,6 @@
 # Real-time Fleet Tracking API
 
-This is a backend project for a **fleet tracking platform** aimed at delivery companies. The API allows registering vehicles and drivers, tracking locations in real-time, managing deliveries, and monitoring delivery statuses.
+This is a backend project for a **fleet tracking platform** aimed at delivery and logistics companies. The API allows registering vehicles and drivers, tracking locations in real-time, managing deliveries, assigning vehicles, generating alerts, and monitoring delivery performance.
 
 This project is built with NodeJS and PostgreSQL and exposes RESTful endpoints for integration with web or mobile clients.
 
@@ -19,23 +19,27 @@ This project is built with NodeJS and PostgreSQL and exposes RESTful endpoints f
 
 ## Implementation Details
 
-The backend exposes APIs that return necessary responses for managing vehicles, drivers, deliveries, and real-time locations.
+The backend exposes APIs for managing vehicles, drivers, deliveries, real-time locations, assignments, alerts, and reports.
 
 - **Vehicles**
-  - `POST /api/vehicles` — Register a new vehicle
-  - `GET /api/vehicles` — Retrieve all vehicles
-  - `GET /api/vehicles/{id}` — Retrieve vehicle details including assigned driver
+  - CRUD operations
+  - Update status (active, maintenance, out-of-service)
+  - Track last known location
 - **Drivers**
-  - `POST /api/drivers` — Register a new driver
-  - `GET /api/drivers` — List all drivers
-  - `GET /api/drivers/{id}` — Retrieve driver profile with current assigned vehicle
+  - CRUD operations
+  - Assign/unassign vehicles
+  - View delivery history
 - **Deliveries**
-  - `POST /api/deliveries` — Create a new delivery
-  - `GET /api/deliveries/{id}` — Get delivery status
-  - `PUT /api/deliveries/{id}` — Update delivery status
+  - CRUD operations
+  - Track status and current location
+- **Assignments**
+  - Assign vehicles to drivers dynamically
 - **Locations**
-  - `POST /api/location` — Update vehicle GPS location
-  - `GET /api/location/{vehicle_id}` — Retrieve last known location of a vehicle
+  - Update and retrieve vehicle GPS
+- **Alerts**
+  - Create and view alerts (late delivery, route deviation)
+- **Reports**
+  - Fleet utilization and delivery performance metrics
 
 ---
 
@@ -46,5 +50,49 @@ The backend exposes APIs that return necessary responses for managing vehicles, 
 - `Deliveries`
 - `Locations`
 - `Companies`
+- `Assignments`
+- `Alerts`
+- `Routes` (optional for future extensions)
+
+---
+
+## API Endpoints (Summary)
+
+- **Vehicles**
+  - `GET /api/vehicles` — list all vehicles
+  - `GET /api/vehicles/{id}` — vehicle details with driver and location
+  - `POST /api/vehicles` — add a new vehicle
+  - `PUT /api/vehicles/{id}` — update vehicle info
+  - `PATCH /api/vehicles/{id}/status` — update vehicle status
+  - `DELETE /api/vehicles/{id}` — delete vehicle
+  - `GET /api/vehicles/{id}/deliveries` — list deliveries for a vehicle
+
+- **Drivers**
+  - `GET /api/drivers` — list all drivers
+  - `GET /api/drivers/{id}` — driver profile
+  - `POST /api/drivers` — add new driver
+  - `PUT /api/drivers/{id}` — update driver info
+  - `GET /api/drivers/{id}/deliveries` — list deliveries for a driver
+
+- **Deliveries**
+  - `POST /api/deliveries` — create delivery
+  - `GET /api/deliveries/{id}` — get delivery status
+  - `PUT /api/deliveries/{id}` — update delivery status
+
+- **Assignments**
+  - `POST /api/assignments` — assign vehicle to driver
+  - `DELETE /api/assignments/{id}` — unassign vehicle
+
+- **Locations**
+  - `POST /api/location` — update vehicle location
+  - `GET /api/location/{vehicle_id}` — get last known location
+
+- **Alerts**
+  - `POST /api/alerts` — create an alert
+  - `GET /api/alerts` — list active alerts
+
+- **Reports**
+  - `GET /api/reports/vehicle-utilization` — vehicle usage percentage
+  - `GET /api/reports/delivery-performance` — deliveries on-time vs delayed
 
 ---
