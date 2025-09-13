@@ -2,7 +2,7 @@
 
 This is a backend project for a **fleet tracking platform** aimed at delivery and logistics companies. The API allows registering vehicles and drivers, tracking locations in real-time, managing deliveries, assigning vehicles, generating alerts, and monitoring delivery performance.
 
-This project is built with NodeJS and PostgreSQL and exposes RESTful endpoints for integration with web or mobile clients.
+This project is built with NodeJS and mongoDB and exposes RESTful endpoints for integration with web or mobile clients.
 
 ---
 
@@ -10,8 +10,8 @@ This project is built with NodeJS and PostgreSQL and exposes RESTful endpoints f
 
 - **Tech stack**
   - Backend: NodeJS (Express or Fastify)
-  - Database: PostgreSQL
-  - ORM: Prisma or TypeORM
+  - Database: mongoDB
+  - ORM: mongoose
 - **Ports**
   - Backend: 8000
 
