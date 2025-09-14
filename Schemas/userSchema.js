@@ -7,7 +7,7 @@ export const UserSchema = new mongoose.Schema({
     unique: true,
     trim: true
   },
-  password_hash: {
+  password: {
     type: String,
     required: true
   },
@@ -16,11 +16,9 @@ export const UserSchema = new mongoose.Schema({
     required: true
   },
   role: {
-    role: {
-      type: String,
-      enum: ['admin', 'operator', 'user'],
-      default: 'user'
-    }
+    type: String,
+    enum: ['admin', 'operator', 'user'],
+    default: 'user'
   }
 }, {
   timestamps: true
