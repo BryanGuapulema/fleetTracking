@@ -1,98 +1,179 @@
-# Real-time Fleet Tracking API
+# Public Transport API — Estado de Transporte Público
 
-This is a backend project for a **fleet tracking platform** aimed at delivery and logistics companies. The API allows registering vehicles and drivers, tracking locations in real-time, managing deliveries, assigning vehicles, generating alerts, and monitoring delivery performance.
+## Descripción del proyecto
+Una API que proporciona información en tiempo real sobre líneas de transporte, vehículos (buses, trenes, tranvías), horarios, retrasos, ocupación estimada y paradas. Puede ser consumida por aplicaciones de movilidad urbana, sitios web de información de transporte o integraciones de terceros.
 
-This project is built with NodeJS and mongoDB and exposes RESTful endpoints for integration with web or mobile clients.
-
----
-
-## Technical Specifications
-
-- **Tech stack**
-  - Backend: NodeJS (Express or Fastify)
-  - Database: mongoDB
-  - ORM: mongoose
-- **Ports**
-  - Backend: 8000
+El proyecto está diseñado para **backend**, usando Node.js + TypeScript y PostgreSQL, y puede ejecutarse **localmente** sin necesidad de servicios en la nube.
 
 ---
 
-## Implementation Details
-
-The backend exposes APIs for managing vehicles, drivers, deliveries, real-time locations, assignments, alerts, and reports.
-
-- **Vehicles**
-  - CRUD operations
-  - Update status (active, maintenance, out-of-service)
-  - Track last known location
-- **Drivers**
-  - CRUD operations
-  - Assign/unassign vehicles
-  - View delivery history
-- **Deliveries**
-  - CRUD operations
-  - Track status and current location
-- **Assignments**
-  - Assign vehicles to drivers dynamically
-- **Locations**
-  - Update and retrieve vehicle GPS
-- **Alerts**
-  - Create and view alerts (late delivery, route deviation)
-- **Reports**
-  - Fleet utilization and delivery performance metrics
+## Problema que resuelve
+- Falta de información centralizada sobre horarios y estado de transporte público.  
+- Usuarios pasan tiempo esperando sin conocer retrasos o incidencias.  
+- Autoridades y operadores necesitan un sistema sencillo para exponer datos actualizados.
 
 ---
 
-## Database Tables
-
-- `Vehicles`
-- `Drivers`
-- `Deliveries`
-- `Locations`
-- `Companies`
-- `Assignments`
-- `Alerts`
-- `Routes` (optional for future extensions)
+## Valor de negocio
+- Mejor experiencia para los usuarios: menos tiempo de espera y planificación eficiente.  
+- Transparencia y control de las operaciones de transporte.  
+- Integración fácil con apps de movilidad urbana y dashboards de control.
 
 ---
 
-## API Endpoints (Summary)
-
-- **Vehicles**
-  - `GET /api/vehicles` — list all vehicles
-  - `GET /api/vehicles/{id}` — vehicle details with driver and location
-  - `POST /api/vehicles` — add a new vehicle
-  - `PUT /api/vehicles/{id}` — update vehicle info
-  - `PATCH /api/vehicles/{id}/status` — update vehicle status
-  - `DELETE /api/vehicles/{id}` — delete vehicle
-  - `GET /api/vehicles/{id}/deliveries` — list deliveries for a vehicle
-
-- **Drivers**
-  - `GET /api/drivers` — list all drivers
-  - `GET /api/drivers/{id}` — driver profile
-  - `POST /api/drivers` — add new driver
-  - `PUT /api/drivers/{id}` — update driver info
-  - `GET /api/drivers/{id}/deliveries` — list deliveries for a driver
-
-- **Deliveries**
-  - `POST /api/deliveries` — create delivery
-  - `GET /api/deliveries/{id}` — get delivery status
-  - `PUT /api/deliveries/{id}` — update delivery status
-
-- **Assignments**
-  - `POST /api/assignments` — assign vehicle to driver
-  - `DELETE /api/assignments/{id}` — unassign vehicle
-
-- **Locations**
-  - `POST /api/location` — update vehicle location
-  - `GET /api/location/{vehicle_id}` — get last known location
-
-- **Alerts**
-  - `POST /api/alerts` — create an alert
-  - `GET /api/alerts` — list active alerts
-
-- **Reports**
-  - `GET /api/reports/vehicle-utilization` — vehicle usage percentage
-  - `GET /api/reports/delivery-performance` — deliveries on-time vs delayed
+## MVP — Funcionalidades mínimas
+1. Autenticación básica con JWT para administradores y operadores.  
+2. Listado de líneas de transporte y detalles (tipo, rutas, paradas).  
+3. Estado en tiempo real de vehículos: ubicación, ocupación, retrasos.  
+4. Consulta de próximas llegadas por estación.  
+5. Reporte y resolución de incidentes (averías, retrasos, mantenimiento).  
 
 ---
+
+## Arquitectura propuesta
+- **Backend:** Node.js + TypeScript (NestJS o Express).  
+- **Base de datos:** PostgreSQL.  
+- **Cache / tareas:** Redis para próximos horarios y vehículos cercanos.  
+- **Observabilidad:** logs estructurados, métricas básicas.  
+- **Testing:** Jest para unit e integration tests.
+
+---
+
+## Seguridad y autenticación
+- JWT + refresh tokens.  
+- Roles: `admin`, `operator`, `user`.  
+- Rate limiting y validación estricta de inputs.
+
+---
+
+## Esquema de base de datos
+
+### users
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | UUID PK | Identificador único |
+| email | varchar unique | Correo del usuario |
+| password_hash | varchar | Contraseña en hash |
+| name | varchar | Nombre completo |
+| role | enum('admin','operator','user') | Rol de usuario |
+| created_at | timestamptz | Fecha de creación |
+| updated_at | timestamptz | Fecha de actualización |
+
+### lines
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | UUID PK | Identificador de la línea |
+| name | varchar | Nombre de la línea (ej. "Línea 10") |
+| type | enum('bus','train','tram') | Tipo de transporte |
+| route_code | varchar | Código opcional de ruta |
+| created_at | timestamptz | Fecha creación |
+| updated_at | timestamptz | Fecha actualización |
+
+### stations
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | UUID PK | Identificador de estación |
+| line_id | UUID FK | Línea a la que pertenece |
+| name | varchar | Nombre de la estación |
+| location | geometry(Point,4326) | Coordenadas GPS |
+| sequence | int | Orden en la ruta |
+| created_at | timestamptz | Fecha creación |
+| updated_at | timestamptz | Fecha actualización |
+
+### vehicles
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | UUID PK | Identificador de vehículo |
+| line_id | UUID FK | Línea asignada |
+| vehicle_code | varchar | Número interno o placa |
+| status | enum('active','delayed','out_of_service') | Estado actual |
+| last_known_location | geometry(Point,4326) | Ubicación actual |
+| occupancy_percentage | numeric | Ocupación estimada |
+| updated_at | timestamptz | Última actualización |
+
+### schedules
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | UUID PK | Identificador de horario |
+| line_id | UUID FK | Línea correspondiente |
+| station_id | UUID FK | Estación de referencia |
+| arrival_time | timestamptz | Hora de llegada |
+| departure_time | timestamptz | Hora de salida |
+
+### incidents
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | UUID PK | Identificador de incidente |
+| line_id | UUID FK | Línea afectada |
+| vehicle_id | UUID FK | Vehículo afectado (opcional) |
+| type | enum('delay','breakdown','maintenance','accident') | Tipo de incidente |
+| description | text | Detalles del incidente |
+| reported_at | timestamptz | Fecha reporte |
+| resolved_at | timestamptz | Fecha resolución |
+
+### audit_logs
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | UUID PK | Identificador del log |
+| user_id | UUID FK | Usuario que ejecutó la acción |
+| action | varchar | Acción realizada |
+| resource_type | varchar | Tipo de recurso afectado |
+| resource_id | UUID | ID del recurso |
+| details | jsonb | Detalles adicionales |
+| created_at | timestamptz | Fecha del log |
+
+---
+
+## Endpoints principales
+
+### Auth
+- `POST /api/v1/auth/login` → obtener JWT  
+- `POST /api/v1/auth/refresh` → refrescar token  
+
+### Líneas
+- `GET /api/v1/lines` → listar todas las líneas  
+- `GET /api/v1/lines/:id` → detalle de línea, estaciones y vehículos  
+- `POST /api/v1/lines` → crear línea (admin)  
+- `PATCH /api/v1/lines/:id` → actualizar línea (admin/operator)  
+
+### Estaciones
+- `GET /api/v1/stations/:id` → detalle estación  
+- `GET /api/v1/stations?line_id=` → estaciones de una línea  
+
+### Vehículos
+- `GET /api/v1/vehicles?line_id=&status=` → filtrar vehículos  
+- `GET /api/v1/vehicles/:id` → detalle vehículo  
+- `PATCH /api/v1/vehicles/:id` → actualizar estado, ubicación y ocupación  
+
+### Horarios / Próximas llegadas
+- `GET /api/v1/schedules?station_id=&from_time=&to_time=`  
+
+### Incidentes
+- `GET /api/v1/incidents?line_id=&status=open` → incidentes activos  
+- `POST /api/v1/incidents` → reportar incidente  
+- `PATCH /api/v1/incidents/:id/resolve` → marcar resuelto  
+
+---
+
+## Ejemplo de request / response
+
+**Request** `GET /api/v1/vehicles?line_id=10`
+```json
+[
+  {
+    "id": "v-123",
+    "vehicle_code": "BUS-001",
+    "status": "active",
+    "last_known_location": {"lat": -0.180653, "lng": -78.467838},
+    "occupancy_percentage": 65,
+    "updated_at": "2025-09-13T23:30:00Z"
+  },
+  {
+    "id": "v-124",
+    "vehicle_code": "BUS-002",
+    "status": "delayed",
+    "last_known_location": {"lat": -0.182000, "lng": -78.468500},
+    "occupancy_percentage": 50,
+    "updated_at": "2025-09-13T23:25:00Z"
+  }
+]

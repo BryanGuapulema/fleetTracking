@@ -1,410 +1,276 @@
-GET /api/vehicles/{id}
+# Public Transport API — Documentación de Endpoints
 
+API para consultar líneas de transporte público, vehículos, estaciones, horarios e incidentes en tiempo real.  
+
+---
+
+## Auth
+
+**POST /api/auth/login**  
+Description: Authenticate a user and return JWT.  
+Request Body:
+```json
+{
+  "email": "user@example.com",
+  "password": "password123"
+}
+Response (200 OK):
+
+json
+Copiar código
+{
+  "access_token": "jwt_token_here",
+  "refresh_token": "refresh_token_here",
+  "expires_in": 3600
+}
+POST /api/auth/refresh
+Description: Refresh JWT using a valid refresh token.
+Request Body:
+
+json
+Copiar código
+{
+  "refresh_token": "refresh_token_here"
+}
+Response (200 OK):
+
+json
+Copiar código
+{
+  "access_token": "new_jwt_token",
+  "expires_in": 3600
+}
+Lines
+GET /api/lines
+Description: List all transport lines.
+Response (200 OK):
+
+json
+Copiar código
+[
+  {"id": 1, "name": "Line 10", "type": "bus", "route_code": "B10"},
+  {"id": 2, "name": "Line 5", "type": "tram", "route_code": "T5"}
+]
+GET /api/lines/{id}
+Description: Get details of a line, including stations and vehicles.
+Parameters: id (integer) — Line ID
+Response (200 OK):
+
+json
+Copiar código
+{
+  "id": 1,
+  "name": "Line 10",
+  "type": "bus",
+  "route_code": "B10",
+  "stations": [
+    {"id": 1, "name": "Station A", "lat": 40.7128, "lng": -74.0060},
+    {"id": 2, "name": "Station B", "lat": 40.7150, "lng": -74.0100}
+  ],
+  "vehicles": [
+    {"id": 101, "vehicle_code": "BUS-001", "status": "active"}
+  ]
+}
+POST /api/lines
+Description: Add a new line (admin only).
+Request Body:
+
+json
+Copiar código
+{
+  "name": "Line 15",
+  "type": "bus",
+  "route_code": "B15"
+}
+Response (201 Created):
+
+json
+Copiar código
+{
+  "id": 3,
+  "name": "Line 15",
+  "type": "bus",
+  "route_code": "B15"
+}
+PATCH /api/lines/{id}
+Description: Update line information (admin/operator).
+Parameters: id (integer) — Line ID
+Request Body:
+
+json
+Copiar código
+{
+  "name": "Line 10A",
+  "route_code": "B10A"
+}
+Response (200 OK):
+
+json
+Copiar código
+{
+  "id": 1,
+  "name": "Line 10A",
+  "type": "bus",
+  "route_code": "B10A"
+}
+Stations
+GET /api/stations
+Description: List stations, optionally filtered by line.
+Query Parameters: line_id (integer, optional)
+Response (200 OK):
+
+json
+Copiar código
+[
+  {"id": 1, "line_id": 1, "name": "Station A", "lat": 40.7128, "lng": -74.0060},
+  {"id": 2, "line_id": 1, "name": "Station B", "lat": 40.7150, "lng": -74.0100}
+]
+GET /api/stations/{id}
+Description: Get details of a station.
+Parameters: id (integer) — Station ID
+Response (200 OK):
+
+json
+Copiar código
+{
+  "id": 1,
+  "line_id": 1,
+  "name": "Station A",
+  "lat": 40.7128,
+  "lng": -74.0060,
+  "sequence": 1
+}
+Vehicles
+GET /api/vehicles
+Description: List vehicles, optionally filtered by line or status.
+Query Parameters:
+
+line_id (integer, optional)
+
+status (string, optional: active, delayed, out_of_service)
+Response (200 OK):
+
+json
+Copiar código
+[
+  {
+    "id": 101,
+    "vehicle_code": "BUS-001",
+    "line_id": 1,
+    "status": "active",
+    "occupancy_percentage": 65,
+    "last_location": {"lat": 40.7128, "lng": -74.0060, "timestamp": "2025-09-13T23:30:00Z"}
+  }
+]
+GET /api/vehicles/{id}
 Description: Get vehicle details by ID.
 Parameters: id (integer) — Vehicle ID
 Response (200 OK):
 
+json
+Copiar código
 {
-  "id": 1,
-  "license_plate": "ABC123",
-  "type": "van",
-  "capacity": 1000,
-  "company_id": 1,
-  "assigned_driver_id": 5,
+  "id": 101,
+  "vehicle_code": "BUS-001",
+  "line_id": 1,
   "status": "active",
-  "last_location": {
-    "lat": 40.7128,
-    "lng": -74.0060,
-    "timestamp": "2025-09-12T14:30:00Z"
-  }
+  "occupancy_percentage": 65,
+  "last_location": {"lat": 40.7128, "lng": -74.0060, "timestamp": "2025-09-13T23:30:00Z"}
 }
-
-POST /api/vehicles
-
-Description: Add a new vehicle.
+PATCH /api/vehicles/{id}
+Description: Update vehicle status, location, or occupancy (operator).
+Parameters: id (integer) — Vehicle ID
 Request Body:
 
+json
+Copiar código
 {
-  "license_plate": "XYZ789",
-  "type": "truck",
-  "capacity": 2000,
-  "company_id": 1
+  "status": "delayed",
+  "occupancy_percentage": 70,
+  "last_location": {"lat": 40.7150, "lng": -74.0100}
 }
+Response (200 OK):
 
+json
+Copiar código
+{
+  "id": 101,
+  "vehicle_code": "BUS-001",
+  "status": "delayed",
+  "occupancy_percentage": 70,
+  "last_location": {"lat": 40.7150, "lng": -74.0100, "timestamp": "2025-09-13T23:40:00Z"}
+}
+Schedules
+GET /api/schedules
+Description: Get upcoming arrivals at a station.
+Query Parameters:
 
+station_id (integer, required)
+
+from_time (datetime, optional)
+
+to_time (datetime, optional)
+Response (200 OK):
+
+json
+Copiar código
+[
+  {"line_id": 1, "vehicle_id": 101, "arrival_time": "2025-09-13T23:45:00Z", "departure_time": "2025-09-13T23:50:00Z"},
+  {"line_id": 1, "vehicle_id": 102, "arrival_time": "2025-09-13T23:55:00Z", "departure_time": "2025-09-14T00:00:00Z"}
+]
+Incidents
+GET /api/incidents
+Description: List incidents, optionally filtered by line or status.
+Query Parameters:
+
+line_id (integer, optional)
+
+status (string, optional: open, resolved)
+Response (200 OK):
+
+json
+Copiar código
+[
+  {"id": 1, "line_id": 1, "vehicle_id": 101, "type": "delay", "description": "Traffic congestion", "reported_at": "2025-09-13T23:20:00Z", "resolved_at": null}
+]
+POST /api/incidents
+Description: Report a new incident (operator/admin).
+Request Body:
+
+json
+Copiar código
+{
+  "line_id": 1,
+  "vehicle_id": 101,
+  "type": "delay",
+  "description": "Accident on route"
+}
 Response (201 Created):
 
+json
+Copiar código
 {
   "id": 2,
-  "license_plate": "XYZ789",
-  "type": "truck",
-  "capacity": 2000,
-  "company_id": 1,
-  "assigned_driver_id": null,
-  "status": "active"
+  "line_id": 1,
+  "vehicle_id": 101,
+  "type": "delay",
+  "description": "Accident on route",
+  "reported_at": "2025-09-13T23:50:00Z",
+  "resolved_at": null
 }
-
-PUT /api/vehicles/{id}
-
-Description: Update vehicle info.
-Request Body:
-
-{
-  "capacity": 2200
-}
-
-
+PATCH /api/incidents/{id}/resolve
+Description: Mark an incident as resolved.
+Parameters: id (integer) — Incident ID
 Response (200 OK):
 
+json
+Copiar código
 {
   "id": 2,
-  "license_plate": "XYZ789",
-  "type": "truck",
-  "capacity": 2200,
-  "company_id": 1,
-  "assigned_driver_id": null,
-  "status": "active"
-}
-
-PATCH /api/vehicles/{id}/status
-
-Description: Update vehicle status (active, maintenance, out-of-service).
-Request Body:
-
-{
-  "status": "maintenance"
-}
-
-
-Response (200 OK):
-
-{
-  "id": 2,
-  "status": "maintenance"
-}
-
-DELETE /api/vehicles/{id}
-
-Description: Delete a vehicle.
-Response (200 OK):
-
-{
-  "message": "Vehicle deleted successfully."
-}
-
-GET /api/vehicles/{id}/deliveries
-
-Description: List all deliveries associated with a vehicle.
-Response (200 OK):
-
-[
-  {
-    "id": 1,
-    "driver_id": 5,
-    "destination": "123 Main St, New York, NY",
-    "package_details": "10 boxes, 5 kg each",
-    "status": "in-progress",
-    "created_at": "2025-09-12T14:45:00Z",
-    "current_location": {
-      "lat": 40.7130,
-      "lng": -74.0070,
-      "timestamp": "2025-09-12T15:00:00Z"
-    }
-  }
-]
-
-2. Drivers
-GET /api/drivers
-
-Description: List all drivers.
-Response (200 OK):
-
-[
-  {
-    "id": 5,
-    "name": "John Doe",
-    "license_number": "D123456",
-    "phone": "+1234567890",
-    "assigned_vehicle_id": 1
-  }
-]
-
-GET /api/drivers/{id}
-
-Description: Get driver profile.
-Response (200 OK):
-
-{
-  "id": 5,
-  "name": "John Doe",
-  "license_number": "D123456",
-  "phone": "+1234567890",
-  "assigned_vehicle_id": 1
-}
-
-POST /api/drivers
-
-Description: Add a new driver.
-Request Body:
-
-{
-  "name": "Jane Smith",
-  "license_number": "D654321",
-  "phone": "+0987654321",
-  "assigned_vehicle_id": 2
-}
-
-
-Response (201 Created):
-
-{
-  "id": 6,
-  "name": "Jane Smith",
-  "license_number": "D654321",
-  "phone": "+0987654321",
-  "assigned_vehicle_id": 2
-}
-
-PUT /api/drivers/{id}
-
-Description: Update driver info.
-Request Body:
-
-{
-  "phone": "+1112223333",
-  "assigned_vehicle_id": 3
-}
-
-
-Response (200 OK):
-
-{
-  "id": 6,
-  "name": "Jane Smith",
-  "license_number": "D654321",
-  "phone": "+1112223333",
-  "assigned_vehicle_id": 3
-}
-
-GET /api/drivers/{id}/deliveries
-
-Description: List all deliveries associated with a driver.
-Response (200 OK):
-
-[
-  {
-    "id": 1,
-    "vehicle_id": 1,
-    "destination": "123 Main St, New York, NY",
-    "package_details": "10 boxes, 5 kg each",
-    "status": "in-progress",
-    "created_at": "2025-09-12T14:45:00Z",
-    "current_location": {
-      "lat": 40.7130,
-      "lng": -74.0070,
-      "timestamp": "2025-09-12T15:00:00Z"
-    }
-  }
-]
-
-3. Deliveries
-POST /api/deliveries
-
-Description: Create a new delivery.
-Request Body:
-
-{
-  "vehicle_id": 1,
-  "driver_id": 5,
-  "destination": "123 Main St, New York, NY",
-  "package_details": "10 boxes, 5 kg each",
-  "status": "pending"
-}
-
-
-Response (201 Created):
-
-{
-  "id": 1,
-  "vehicle_id": 1,
-  "driver_id": 5,
-  "destination": "123 Main St, New York, NY",
-  "package_details": "10 boxes, 5 kg each",
-  "status": "pending",
-  "created_at": "2025-09-12T14:45:00Z"
-}
-
-GET /api/deliveries/{id}
-
-Description: Get delivery details and status.
-Response (200 OK):
-
-{
-  "id": 1,
-  "vehicle_id": 1,
-  "driver_id": 5,
-  "destination": "123 Main St, New York, NY",
-  "package_details": "10 boxes, 5 kg each",
-  "status": "in-progress",
-  "current_location": {
-    "lat": 40.7130,
-    "lng": -74.0070,
-    "timestamp": "2025-09-12T15:00:00Z"
-  }
-}
-
-PUT /api/deliveries/{id}
-
-Description: Update delivery status.
-Request Body:
-
-{
-  "status": "delivered"
-}
-
-
-Response (200 OK):
-
-{
-  "id": 1,
-  "vehicle_id": 1,
-  "driver_id": 5,
-  "destination": "123 Main St, New York, NY",
-  "package_details": "10 boxes, 5 kg each",
-  "status": "delivered"
-}
-
-4. Assignments
-POST /api/assignments
-
-Description: Assign a vehicle to a driver.
-Request Body:
-
-{
-  "vehicle_id": 2,
-  "driver_id": 6
-}
-
-
-Response (201 Created):
-
-{
-  "assignment_id": 1,
-  "vehicle_id": 2,
-  "driver_id": 6
-}
-
-DELETE /api/assignments/{id}
-
-Description: Unassign a vehicle from a driver.
-Response (200 OK):
-
-{
-  "message": "Assignment removed successfully."
-}
-
-5. Locations
-POST /api/location
-
-Description: Update vehicle GPS location.
-Request Body:
-
-{
-  "vehicle_id": 1,
-  "lat": 40.7128,
-  "lng": -74.0060,
-  "timestamp": "2025-09-12T15:00:00Z"
-}
-
-
-Response (201 Created):
-
-{
-  "message": "Location updated successfully."
-}
-
-GET /api/location/{vehicle_id}
-
-Description: Get last known location of a vehicle.
-Response (200 OK):
-
-{
-  "vehicle_id": 1,
-  "lat": 40.7128,
-  "lng": -74.0060,
-  "timestamp": "2025-09-12T15:00:00Z"
-}
-
-6. Alerts
-POST /api/alerts
-
-Description: Create a new alert.
-Request Body:
-
-{
-  "vehicle_id": 1,
-  "type": "late_delivery",
-  "message": "Delivery delayed by 15 minutes",
-  "priority": "high"
-}
-
-
-Response (201 Created):
-
-{
-  "alert_id": 1,
-  "vehicle_id": 1,
-  "type": "late_delivery",
-  "message": "Delivery delayed by 15 minutes",
-  "priority": "high",
-  "created_at": "2025-09-12T15:05:00Z"
-}
-
-GET /api/alerts
-
-Description: List active alerts.
-Response (200 OK):
-
-[
-  {
-    "alert_id": 1
-
-Dijiste:
-continua
-ChatGPT dijo:
-    "vehicle_id": 1,
-    "type": "late_delivery",
-    "message": "Delivery delayed by 15 minutes",
-    "priority": "high",
-    "created_at": "2025-09-12T15:05:00Z"
-  }
-]
-
-7. Reports
-GET /api/reports/vehicle-utilization
-
-Description: Get fleet utilization percentages.
-Response (200 OK):
-
-[
-  {
-    "vehicle_id": 1,
-    "usage_percentage": 75
-  },
-  {
-    "vehicle_id": 2,
-    "usage_percentage": 50
-  }
-]
-
-GET /api/reports/delivery-performance
-
-Description: Get deliveries on-time vs delayed.
-Response (200 OK):
-
-{
-  "total_deliveries": 20,
-  "on_time": 15,
-  "delayed": 5,
-  "percentage_on_time": 75
+  "line_id": 1,
+  "vehicle_id": 101,
+  "type": "delay",
+  "description": "Accident on route",
+  "reported_at": "2025-09-13T23:50:00Z",
+  "resolved_at": "2025-09-13T23:55:00Z"
 }
