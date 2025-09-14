@@ -17,7 +17,6 @@ Request Body:
 Response (200 OK):
 
 json
-Copiar código
 {
   "access_token": "jwt_token_here",
   "refresh_token": "refresh_token_here",
@@ -28,14 +27,12 @@ Description: Refresh JWT using a valid refresh token.
 Request Body:
 
 json
-Copiar código
 {
   "refresh_token": "refresh_token_here"
 }
 Response (200 OK):
 
 json
-Copiar código
 {
   "access_token": "new_jwt_token",
   "expires_in": 3600
@@ -46,7 +43,6 @@ Description: List all transport lines.
 Response (200 OK):
 
 json
-Copiar código
 [
   {"id": 1, "name": "Line 10", "type": "bus", "route_code": "B10"},
   {"id": 2, "name": "Line 5", "type": "tram", "route_code": "T5"}
@@ -57,7 +53,6 @@ Parameters: id (integer) — Line ID
 Response (200 OK):
 
 json
-Copiar código
 {
   "id": 1,
   "name": "Line 10",
@@ -76,7 +71,6 @@ Description: Add a new line (admin only).
 Request Body:
 
 json
-Copiar código
 {
   "name": "Line 15",
   "type": "bus",
@@ -85,7 +79,6 @@ Copiar código
 Response (201 Created):
 
 json
-Copiar código
 {
   "id": 3,
   "name": "Line 15",
@@ -98,7 +91,6 @@ Parameters: id (integer) — Line ID
 Request Body:
 
 json
-Copiar código
 {
   "name": "Line 10A",
   "route_code": "B10A"
@@ -106,7 +98,6 @@ Copiar código
 Response (200 OK):
 
 json
-Copiar código
 {
   "id": 1,
   "name": "Line 10A",
@@ -120,7 +111,6 @@ Query Parameters: line_id (integer, optional)
 Response (200 OK):
 
 json
-Copiar código
 [
   {"id": 1, "line_id": 1, "name": "Station A", "lat": 40.7128, "lng": -74.0060},
   {"id": 2, "line_id": 1, "name": "Station B", "lat": 40.7150, "lng": -74.0100}
@@ -131,7 +121,6 @@ Parameters: id (integer) — Station ID
 Response (200 OK):
 
 json
-Copiar código
 {
   "id": 1,
   "line_id": 1,
@@ -151,7 +140,6 @@ status (string, optional: active, delayed, out_of_service)
 Response (200 OK):
 
 json
-Copiar código
 [
   {
     "id": 101,
@@ -168,7 +156,6 @@ Parameters: id (integer) — Vehicle ID
 Response (200 OK):
 
 json
-Copiar código
 {
   "id": 101,
   "vehicle_code": "BUS-001",
@@ -183,7 +170,6 @@ Parameters: id (integer) — Vehicle ID
 Request Body:
 
 json
-Copiar código
 {
   "status": "delayed",
   "occupancy_percentage": 70,
@@ -192,7 +178,6 @@ Copiar código
 Response (200 OK):
 
 json
-Copiar código
 {
   "id": 101,
   "vehicle_code": "BUS-001",
@@ -213,7 +198,6 @@ to_time (datetime, optional)
 Response (200 OK):
 
 json
-Copiar código
 [
   {"line_id": 1, "vehicle_id": 101, "arrival_time": "2025-09-13T23:45:00Z", "departure_time": "2025-09-13T23:50:00Z"},
   {"line_id": 1, "vehicle_id": 102, "arrival_time": "2025-09-13T23:55:00Z", "departure_time": "2025-09-14T00:00:00Z"}
@@ -229,7 +213,6 @@ status (string, optional: open, resolved)
 Response (200 OK):
 
 json
-Copiar código
 [
   {"id": 1, "line_id": 1, "vehicle_id": 101, "type": "delay", "description": "Traffic congestion", "reported_at": "2025-09-13T23:20:00Z", "resolved_at": null}
 ]
@@ -238,7 +221,6 @@ Description: Report a new incident (operator/admin).
 Request Body:
 
 json
-Copiar código
 {
   "line_id": 1,
   "vehicle_id": 101,
@@ -248,7 +230,6 @@ Copiar código
 Response (201 Created):
 
 json
-Copiar código
 {
   "id": 2,
   "line_id": 1,
@@ -264,7 +245,6 @@ Parameters: id (integer) — Incident ID
 Response (200 OK):
 
 json
-Copiar código
 {
   "id": 2,
   "line_id": 1,

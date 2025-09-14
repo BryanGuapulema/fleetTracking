@@ -1,0 +1,13 @@
+########CREATE NEW USER########
+POST http://localhost:8000/users
+Content-Type: application/json
+
+{
+    "email": "email1@email.com",
+    "username": "Usuario1",
+    "password": "contrasenia"
+}
+
+
+########GET ALL USERS########
+GET http://localhost:8000/users/
