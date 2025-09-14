@@ -1,12 +1,14 @@
 import express from 'express'
-import cors from 'cors'
 
+import { corsMiddleware } from '../middlewares/corsMiddleware.js'
 import { homeRoutes } from '../routes/homeRoutes.js'
 import { userRouter } from '../routes/userRoutes.js'
 
 export const app = express()
 
-app.use(cors())
+app.disable('x-powered-by')
+app.use(corsMiddleware())
+app.use(express.json())
 app.use('/users', userRouter)
 
 app.use(homeRoutes)
