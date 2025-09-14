@@ -11,4 +11,20 @@ export class UserModel {
   static async createNewUser (data) {
     return await User.create(data)
   }
+
+  static async getUserById (id) {
+    return await User.findById(id)
+  }
+
+  static async updateUser (id, data) {
+    return await User.findByIdAndUpdate(id, data, { new: true })
+  }
+
+  static async deleteUser (id) {
+    return await User.findByIdAndDelete(id)
+  }
+
+  static async getUserByEmail (email) {
+    return await User.findOne({ email })
+  }
 }

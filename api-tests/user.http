@@ -1,13 +1,26 @@
+########GET ALL USERS########
+GET http://localhost:8000/users/
+
+
+###GET USER BY ID
+GET http://localhost:8000/users/68c741533c5e194483c8c898
+
 ########CREATE NEW USER########
 POST http://localhost:8000/users
 Content-Type: application/json
 
 {
-    "email": "email1@email.com",
+    "email": "email5@email.com",
     "username": "Usuario1",
     "password": "contrasenia"
 }
+####UPDATE USER######################
+PUT http://localhost:8000/users/68c744a505f7f41d39a89a58
+Content-Type: application/json
 
+{
+    "username": "UsuarioActualizado"
+}
 
-########GET ALL USERS########
-GET http://localhost:8000/users/
+####DELETE USER######################
+DELETE http://localhost:8000/users/68c744d205f7f41d39a89a5e
