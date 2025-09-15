@@ -1,7 +1,7 @@
 import z from 'zod'
 
 const stationSchema = z.object({
-  line_id: z.string().length(34),
+  line_id: z.string().length(24),
   name: z.string().min(1),
   location: z.array(
     z.number()

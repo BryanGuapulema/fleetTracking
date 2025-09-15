@@ -1,0 +1,13 @@
+###GET ALL STATIONS
+GET http://localhost:8000/api/stations
+
+###CREATE NEW STATION
+POST http://localhost:8000/api/stations
+Content-Type: application/json
+
+{
+    "line_id": "68c778a518b88688c1ccecf8",
+    "name": "Parada1",
+    "location": [-74.006, 40.7128],
+    "sequence": 1
+}
