@@ -19,7 +19,7 @@ export class StationController {
   static async getStationById (req, res) {
     const { id } = req.params
 
-    const station = await StationController.getStationById(id)
+    const station = await StationModel.getStationById(id)
 
     if (!station) return res.status(404).json({ message: 'Station not found' })
 
