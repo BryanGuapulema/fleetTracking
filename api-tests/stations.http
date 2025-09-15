@@ -1,0 +1,27 @@
+###GET ALL STATIONS
+GET http://localhost:8000/api/stations
+
+###CREATE NEW STATION
+POST http://localhost:8000/api/stations
+Content-Type: application/json
+
+{
+    "line_id": "68c778a518b88688c1ccecf8",
+    "name": "Parada1",
+    "location": [-74.006, 40.7128],
+    "sequence": 1
+}
+
+###GET STATION BY ID
+GET http://localhost:8000/api/stations/68c78c8ed78fec1303790606
+
+###UPDATE STATION
+PUT http://localhost:8000/api/stations/68c78c8ed78fec1303790606
+Content-Type: application/json
+
+{
+    "name": "Parada 1"
+}
+
+###DELETE STATION BY ID
+DELETE  http://localhost:8000/api/stations/68c78c8ed78fec1303790606

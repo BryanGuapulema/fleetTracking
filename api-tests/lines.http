@@ -1,0 +1,27 @@
+###GET ALL LINES
+GET http://localhost:8000/api/lines
+
+
+###CREATE NEW LINE
+POST http://localhost:8000/api/lines
+Content-Type: application/json
+
+{
+    "name": "Linea 2",
+    "route_code": "02"
+}
+
+###GET LINE BY ID
+GET http://localhost:8000/api/lines/68c778a518b88688c1ccecf8
+
+###UPDATE  LINE
+PUT http://localhost:8000/api/lines/68c778a518b88688c1ccecf8
+Content-Type: application/json
+
+{
+    "name": "Linea 11",
+    "route_code": "11A"
+}
+
+###DELETE LINE
+DELETE http://localhost:8000/api/lines/68c778a518b88688c1ccecf8
