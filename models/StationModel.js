@@ -1,4 +1,4 @@
-import { stationSchema } from '../Schemas/stationsSchema'
+import { stationSchema } from '../Schemas/stationsSchema.js'
 import { model } from 'mongoose'
 
 const Station = model('Station', stationSchema)
