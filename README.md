@@ -54,7 +54,7 @@ El proyecto está diseñado para **backend**, usando Node.js + TypeScript y Post
 | id | UUID PK | Identificador único |
 | email | varchar unique | Correo del usuario |
 | password_hash | varchar | Contraseña en hash |
-| name | varchar | Nombre completo |
+| username | varchar | Nombre completo |
 | role | enum('admin','operator','user') | Rol de usuario |
 | created_at | timestamptz | Fecha de creación |
 | updated_at | timestamptz | Fecha de actualización |
@@ -127,30 +127,30 @@ El proyecto está diseñado para **backend**, usando Node.js + TypeScript y Post
 ## Endpoints principales
 
 ### Auth
-- `POST /api/v1/auth/login` → obtener JWT  
-- `POST /api/v1/auth/refresh` → refrescar token  
+- `POST /api/auth/login` → obtener JWT  
+- `POST /api/auth/refresh` → refrescar token  
 
 ### Líneas
-- `GET /api/v1/lines` → listar todas las líneas  
-- `GET /api/v1/lines/:id` → detalle de línea, estaciones y vehículos  
-- `POST /api/v1/lines` → crear línea (admin)  
-- `PATCH /api/v1/lines/:id` → actualizar línea (admin/operator)  
+- `GET /api/lines` → listar todas las líneas  
+- `GET /api/lines/:id` → detalle de línea, estaciones y vehículos  
+- `POST /api/lines` → crear línea (admin)  
+- `PATCH /api/lines/:id` → actualizar línea (admin/operator)  
 
 ### Estaciones
-- `GET /api/v1/stations/:id` → detalle estación  
-- `GET /api/v1/stations?line_id=` → estaciones de una línea  
+- `GET /api/stations/:id` → detalle estación  
+- `GET /api/stations?line_id=` → estaciones de una línea  
 
 ### Vehículos
-- `GET /api/v1/vehicles?line_id=&status=` → filtrar vehículos  
-- `GET /api/v1/vehicles/:id` → detalle vehículo  
-- `PATCH /api/v1/vehicles/:id` → actualizar estado, ubicación y ocupación  
+- `GET /api/vehicles?line_id=&status=` → filtrar vehículos  
+- `GET /api/vehicles/:id` → detalle vehículo  
+- `PATCH /api/vehicles/:id` → actualizar estado, ubicación y ocupación  
 
 ### Horarios / Próximas llegadas
-- `GET /api/v1/schedules?station_id=&from_time=&to_time=`  
+- `GET /api/schedules?station_id=&from_time=&to_time=`  
 
 ### Incidentes
-- `GET /api/v1/incidents?line_id=&status=open` → incidentes activos  
-- `POST /api/v1/incidents` → reportar incidente  
-- `PATCH /api/v1/incidents/:id/resolve` → marcar resuelto  
+- `GET /api/incidents?line_id=&status=open` → incidentes activos  
+- `POST /api/incidents` → reportar incidente  
+- `PATCH /api/incidents/:id/resolve` → marcar resuelto  
 
 ---
