@@ -1,5 +1,5 @@
 import { VehicleModel } from '../models/VehicleModel.js'
-import { validateVehicle } from '../validations/VehicleValidation'
+import { validateVehicle } from '../validations/VehicleValidation.js'
 
 export class VehicleController {
   static async getAllVehicles (req, res) {

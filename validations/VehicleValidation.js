@@ -4,7 +4,9 @@ const vehicleSchema = z.object({
   line_id: z.string().length(24),
   vehicle_code: z.string().trim(),
   status: z.enum(['active', 'delayed', 'out_of_service']),
-  last_known_location: z.number(),
+  last_known_location: z.array(
+    z.number()
+  ).length(2),
   occupancy_percentage: z.number()
 })
 

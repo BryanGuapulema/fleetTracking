@@ -1,0 +1,28 @@
+###GET ALL VEHICLES
+GET http://localhost:8000/api/vehicles
+
+###CREATE NEW VEHICLE
+POST http://localhost:8000/api/vehicles
+Content-Type: application/json
+
+{
+    "line_id": "68c778a518b88688c1ccecf8",
+    "vehicle_code": "ABC-101",
+    "status": "active",
+    "last_known_location": [-74.006, 40.7128],
+    "occupancy_percentage": 10
+}
+
+###GET VEHICLE BY ID
+GET http://localhost:8000/api/vehicles/68c8e14525100a0a2e993e57
+
+###UPDATE VEHICLE
+PUT http://localhost:8000/api/vehicles/68c8e14525100a0a2e993e57
+Content-Type: application/json
+
+{
+    "occupancy_percentage": 30
+}
+
+###DELETE VEHICLE BY ID
+DELETE  http://localhost:8000/api/vehicles/68c8e14525100a0a2e993e57
