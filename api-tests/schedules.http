@@ -1,0 +1,27 @@
+###GET ALL scheduleS
+GET http://localhost:8000/api/schedules
+
+###CREATE NEW schedule
+POST http://localhost:8000/api/schedules
+Content-Type: application/json
+
+{
+    "line_id": "68c778a518b88688c1ccecf8",
+    "station_id": "68c78c8ed78fec1303790606",
+    "arrival_time": "04:15",
+    "departure_time": "03:15"
+}
+
+###GET schedule BY ID
+GET http://localhost:8000/api/schedules/68ca1f77f81a1b21844fba65
+
+###UPDATE schedule
+PUT http://localhost:8000/api/schedules/68ca1f77f81a1b21844fba65
+Content-Type: application/json
+
+{
+    "departure_time": "05:15"
+}
+
+###DELETE schedule BY ID
+DELETE  http://localhost:8000/api/schedules/68ca1f77f81a1b21844fba6

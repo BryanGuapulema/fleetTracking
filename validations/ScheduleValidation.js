@@ -8,10 +8,10 @@ const scheduleSchema = z.object({
   departure_time: z.iso.time()
 })
 
-export function validateschedule (object) {
+export function validateSchedule (object) {
   return scheduleSchema.safeParse(object)
 }
 
-export function validatePartialschedule (object) {
+export function validatePartialSchedule (object) {
   return scheduleSchema.partial().safeParse(object)
 }
