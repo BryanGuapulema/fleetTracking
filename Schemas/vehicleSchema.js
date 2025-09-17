@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-export const VehicleSchema = new mongoose.Schema({
+const VehicleSchema = new mongoose.Schema({
   line_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Line',
@@ -27,3 +27,5 @@ export const VehicleSchema = new mongoose.Schema({
 }, {
   timestamps: true
 })
+
+export const Vehicle = mongoose.model('Vehicle', VehicleSchema)

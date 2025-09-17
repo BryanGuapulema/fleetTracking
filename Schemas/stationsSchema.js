@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 
-export const stationSchema = new Schema({
+const stationSchema = new Schema({
   line_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Line',
@@ -21,3 +21,5 @@ export const stationSchema = new Schema({
   }
 },
 { timestamps: true })
+
+export const Station = mongoose.model('Station', stationSchema)

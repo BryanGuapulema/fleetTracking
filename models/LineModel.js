@@ -1,7 +1,4 @@
-import mongoose from 'mongoose'
-import { lineSchema } from '../Schemas/lineSchema.js'
-
-const Line = mongoose.model('Line', lineSchema)
+import { Line } from '../Schemas/lineSchema.js'
 
 export class LineModel {
   static async getAllLines () {

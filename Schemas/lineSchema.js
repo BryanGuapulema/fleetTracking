@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-export const lineSchema = new mongoose.Schema({
+const lineSchema = new mongoose.Schema({
   name: {
     type: String,
     unique: true,
@@ -20,3 +20,5 @@ export const lineSchema = new mongoose.Schema({
 {
   timestamps: true
 })
+
+export const Line = mongoose.model('Line', lineSchema)

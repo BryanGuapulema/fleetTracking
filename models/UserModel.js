@@ -1,7 +1,4 @@
-import mongoose from 'mongoose'
-import { UserSchema } from '../Schemas/userSchema.js'
-
-const User = mongoose.model('User', UserSchema)
+import { User } from '../Schemas/userSchema.js'
 
 export class UserModel {
   static async getAllUsers () {
