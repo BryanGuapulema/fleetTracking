@@ -1,6 +1,7 @@
 ###GET ALL incidentS
 GET http://localhost:8000/api/incidents
 
+
 ###CREATE NEW incident
 POST http://localhost:8000/api/incidents
 Content-Type: application/json

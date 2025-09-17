@@ -13,6 +13,7 @@ export const app = express()
 app.disable('x-powered-by')
 app.use(corsMiddleware())
 app.use(express.json())
+
 app.use('/api/users', userRouter)
 app.use('/api/lines', lineRouter)
 app.use('/api/stations', stationRouter)
