@@ -1,7 +1,4 @@
-import { stationSchema } from '../Schemas/stationsSchema.js'
-import { model } from 'mongoose'
-
-const Station = model('Station', stationSchema)
+import { Station } from '../Schemas/stationsSchema.js'
 
 export class StationModel {
   static async getAllStations () {
