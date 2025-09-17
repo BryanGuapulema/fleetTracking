@@ -1,8 +1,4 @@
-import { model } from 'mongoose'
-
-import { VehicleSchema } from '../Schemas/vehicleSchema.js'
-
-const Vehicle = model('Vehicle', VehicleSchema)
+import { Vehicle } from '../Schemas/vehicleSchema.js'
 
 export class VehicleModel {
   static async getAllVehicles () {
