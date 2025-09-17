@@ -111,17 +111,6 @@ El proyecto está diseñado para **backend**, usando Node.js + TypeScript y Post
 | reported_at | timestamptz | Fecha reporte |
 | resolved_at | timestamptz | Fecha resolución |
 
-### audit_logs
-| Campo | Tipo | Descripción |
-|-------|------|-------------|
-| id | UUID PK | Identificador del log |
-| user_id | UUID FK | Usuario que ejecutó la acción |
-| action | varchar | Acción realizada |
-| resource_type | varchar | Tipo de recurso afectado |
-| resource_id | UUID | ID del recurso |
-| details | jsonb | Detalles adicionales |
-| created_at | timestamptz | Fecha del log |
-
 ---
 
 ## Endpoints principales
