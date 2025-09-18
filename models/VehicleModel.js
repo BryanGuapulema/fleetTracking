@@ -24,4 +24,8 @@ export class VehicleModel {
   static async getVehiclesByLineId (line_id) {
     return await Vehicle.find({ line_id }).populate('line_id', 'name')
   }
+
+  static async filterVehiclesByStatus (status) {
+    return await Vehicle.find({ status })
+  }
 }

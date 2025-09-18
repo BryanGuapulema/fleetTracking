@@ -4,7 +4,6 @@ import { validatePartialStation, validateStation } from '../validations/StationV
 export class StationController {
   static async getAllStations (req, res) {
     const { line_id } = req.query
-    console.log(line_id)
 
     if (line_id) {
       const stations = await StationModel.getStationsByLineId(line_id)

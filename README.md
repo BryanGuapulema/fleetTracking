@@ -131,8 +131,8 @@ El proyecto está diseñado para **backend**, usando Node.js + TypeScript y Post
 
 ### Vehículos
 - `GET /api/vehicles?line_id=&status=` → filtrar vehículos  
-- `GET /api/vehicles/:id` → detalle vehículo  
-- `PATCH /api/vehicles/:id` → actualizar estado, ubicación y ocupación  
+- `GET /api/vehicles/:id` → detalle vehículo  ✅
+- `PATCH /api/vehicles/:id` → actualizar estado, ubicación y ocupación  ✅🟡
 
 ### Horarios / Próximas llegadas
 - `GET /api/schedules?station_id=&from_time=&to_time=`  

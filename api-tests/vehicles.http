@@ -26,3 +26,6 @@ Content-Type: application/json
 
 ###DELETE VEHICLE BY ID
 DELETE  http://localhost:8000/api/vehicles/68c8e14525100a0a2e993e57
+
+###GET ALL VEHICLES BY STATUS AND LINE 
+GET http://localhost:8000/api/vehicles?line_id=68c778a518b88688c1ccecf8&status=active
