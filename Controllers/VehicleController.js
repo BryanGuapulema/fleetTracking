@@ -3,6 +3,15 @@ import { validatePartialVehicle, validateVehicle } from '../validations/VehicleV
 
 export class VehicleController {
   static async getAllVehicles (req, res) {
+    const { line_id, status } = req.query
+
+    if (status && line_id) {
+      const vehicles = await VehicleModel.filterVehiclesByStatus(status)
+      const filtetredVehicles = vehicles.filter(vehicle => vehicle.line_id == line_id)
+
+      return res.json(filtetredVehicles)
+    }
+
     const vehicles = await VehicleModel.getAllVehicles()
     res.json(vehicles)
   }
