@@ -7,9 +7,9 @@ Content-Type: application/json
 
 {
     "line_id": "68c778a518b88688c1ccecf8",
-    "name": "Parada1",
+    "name": "Parada5",
     "location": [-74.006, 40.7128],
-    "sequence": 1
+    "sequence": 5
 }
 
 ###GET STATION BY ID
@@ -25,3 +25,7 @@ Content-Type: application/json
 
 ###DELETE STATION BY ID
 DELETE  http://localhost:8000/api/stations/68c78c8ed78fec1303790606
+
+
+###GET ALL STATIONS OF A LINE
+GET http://localhost:8000/api/stations?line_id=68c778a518b88688c1ccecf8

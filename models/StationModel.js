@@ -20,4 +20,8 @@ export class StationModel {
   static async deleteStation (id) {
     return await Station.findByIdAndDelete(id)
   }
+
+  static async getStationsByLineId (line_id) {
+    return await Station.find({ line_id }).populate('line_id', 'name')
+  }
 }
