@@ -120,10 +120,10 @@ El proyecto está diseñado para **backend**, usando Node.js + TypeScript y Post
 - `POST /api/auth/refresh` → refrescar token  
 
 ### Líneas
-- `GET /api/lines` → listar todas las líneas  
-- `GET /api/lines/:id` → detalle de línea, estaciones y vehículos  
-- `POST /api/lines` → crear línea (admin)  
-- `PATCH /api/lines/:id` → actualizar línea (admin/operator)  
+- `GET /api/lines` → listar todas las líneas  ✅
+- `GET /api/lines/:id` → detalle de línea, estaciones y vehículos  ✅
+- `POST /api/lines` → crear línea (admin)  ✅🟡
+- `PATCH /api/lines/:id` → actualizar línea (admin/operator)  ✅🟡
 
 ### Estaciones
 - `GET /api/stations/:id` → detalle estación  ✅
