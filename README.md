@@ -126,8 +126,8 @@ El proyecto está diseñado para **backend**, usando Node.js + TypeScript y Post
 - `PATCH /api/lines/:id` → actualizar línea (admin/operator)  
 
 ### Estaciones
-- `GET /api/stations/:id` → detalle estación  
-- `GET /api/stations?line_id=` → estaciones de una línea  
+- `GET /api/stations/:id` → detalle estación  ✅
+- `GET /api/stations?line_id=` → estaciones de una línea   ✅
 
 ### Vehículos
 - `GET /api/vehicles?line_id=&status=` → filtrar vehículos  
