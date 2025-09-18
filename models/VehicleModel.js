@@ -20,4 +20,8 @@ export class VehicleModel {
   static async deleteVehicle (id) {
     return await Vehicle.findByIdAndDelete(id)
   }
+
+  static async getVehiclesByLineId (line_id) {
+    return await Vehicle.find({ line_id }).populate('line_id', 'name')
+  }
 }

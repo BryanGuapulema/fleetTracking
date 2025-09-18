@@ -1,4 +1,6 @@
 import { LineModel } from '../models/LineModel.js'
+import { StationModel } from '../models/StationModel.js'
+import { VehicleModel } from '../models/VehicleModel.js'
 import { validateLine, validatePartialLine } from '../validations/LineValidation.js'
 
 export class LineController {
@@ -20,7 +22,35 @@ export class LineController {
     const { id } = req.params
     const line = await LineModel.getLineById(id)
     if (!line) return res.status(404).json({ message: 'Line not found' })
-    return res.json(line)
+
+    const [stations, vehicles] = await Promise.all([
+      StationModel.getStationsByLineId(id),
+      VehicleModel.getVehiclesByLineId(id)
+    ])
+
+    const stationsFormated = stations.map(station => {
+      return {
+        id: station.id,
+        name: station.name,
+        sequence: station.sequence
+      }
+    })
+
+    const vehiclesFormated = vehicles.map(vehicle => {
+      return {
+        id: vehicle.id,
+        name: vehicle.name,
+        vehicle_code: vehicle.vehicle_code
+      }
+    })
+
+    const lineData = {
+      line,
+      stations: stationsFormated,
+      vehicles: vehiclesFormated
+    }
+
+    return res.json(lineData)
   }
 
   static async updateLine (req, res) {
