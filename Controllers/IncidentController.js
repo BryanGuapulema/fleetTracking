@@ -41,9 +41,9 @@ export class IncidentController {
     if (!result.success) res.status(400).json({ message: JSON.parse(result.error) })
 
     const { id } = req.params
-    const incidentUpdated = await IncidentModel.updateIncident(id, result.data)
-    if (!incidentUpdated) return res.status(404).json({ message: 'Incident not found' })
-    return res.json(incidentUpdated)
+    const incidentResolved = await IncidentModel.updateIncident(id, result.data)
+    if (!incidentResolved) return res.status(404).json({ message: 'Incident not found' })
+    return res.json(incidentResolved)
   }
 
   static async deleteIncident (req, res) {
@@ -54,5 +54,12 @@ export class IncidentController {
     if (!incidentDeleted) return res.status(404).json({ message: 'Incident not found' })
 
     return res.json(incidentDeleted)
+  }
+
+  static async resolveIncident (req, res) {
+    const { id } = req.params
+    const incidentResolved = await IncidentModel.updateIncident(id, { status: 'resolved' })
+    if (!incidentResolved) return res.status(404).json({ message: 'Incident not found' })
+    return res.json(incidentResolved)
   }
 }

@@ -140,6 +140,6 @@ El proyecto está diseñado para **backend**, usando Node.js + TypeScript y Post
 ### Incidents
 - `GET /api/incidents?line_id=&type=` → incidentes activos  ✅
 - `POST /api/incidents` → reportar incidente  ✅
-- `PATCH /api/incidents/:id/resolve` → marcar resuelto  
+- `PATCH /api/incidents/:id/resolve` → marcar resuelto  ✅
 
 ---
