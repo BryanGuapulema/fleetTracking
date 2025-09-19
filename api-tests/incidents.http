@@ -10,7 +10,7 @@ Content-Type: application/json
     "line_id": "68c778a518b88688c1ccecf8",
     "vehicle_id": "68c8e14525100a0a2e993e57",
     "type":  "breakdown",
-    "description": "description",
+    "description": "description2",
     "resolved_at": "2025-10-27T10:00:00Z"
 }
 
@@ -29,7 +29,7 @@ Content-Type: application/json
 DELETE  http://localhost:8000/api/incidents/68ca305437dfbf8356201085
 
 ### GET ALL INCIDENTS OF A LINE
-GET http://localhost:8000/api/incidents?line_id=68c778a518b88688c1ccecf8&type=breakdown
+GET http://localhost:8000/api/incidents?line_id=68c778a518b88688c1ccecf8&status=active
 
 ###MARK INCIDENT AS RESOLVED
-PATCH  http://localhost:8000/api/incidents/68ca305437dfbf8356201085/resolve
+PATCH  http://localhost:8000/api/incidents/68ccda3a47822c9992791bae/resolve
