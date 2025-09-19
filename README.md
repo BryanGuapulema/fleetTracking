@@ -137,8 +137,8 @@ El proyecto está diseñado para **backend**, usando Node.js + TypeScript y Post
 ### Horarios / Próximas llegadas
 - `GET /api/schedules?station_id=`  ✅
 
-### Incidentes
-- `GET /api/incidents?line_id=&status=open` → incidentes activos  
+### Incidents
+- `GET /api/incidents?line_id=&type=` → incidentes activos  ✅
 - `POST /api/incidents` → reportar incidente  ✅
 - `PATCH /api/incidents/:id/resolve` → marcar resuelto  
 

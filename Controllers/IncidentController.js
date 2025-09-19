@@ -3,6 +3,15 @@ import { validatePartialIncident, validateIncident } from '../validations/Incide
 
 export class IncidentController {
   static async getAllIncidents (req, res) {
+    const { line_id, status } = req.query
+
+    if (status && line_id) {
+      const incidents = await IncidentModel.getIncidentByLineId(line_id)
+      const filtetredIncidents = incidents.filter(incident => incident.type === type)
+
+      return res.json(filtetredIncidents)
+    }
+
     const Incidents = await IncidentModel.getAllIncidents()
     res.json(Incidents)
   }
