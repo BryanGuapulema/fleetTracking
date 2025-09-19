@@ -20,4 +20,8 @@ export class ScheduleModel {
   static async deleteSchedule (id) {
     return await Schedule.findByIdAndDelete(id)
   }
+
+  static async getSchedulesforStation (station_id) {
+    return await Schedule.find({ station_id }).populate('line_id', 'name')
+  }
 }

@@ -20,4 +20,8 @@ export class IncidentModel {
   static async deleteIncident (id) {
     return await Incident.findByIdAndDelete(id)
   }
+
+  static async getIncidentByLineId (line_id) {
+    return await Incident.find({ line_id })
+  }
 }
