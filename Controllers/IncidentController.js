@@ -3,6 +3,15 @@ import { validatePartialIncident, validateIncident } from '../validations/Incide
 
 export class IncidentController {
   static async getAllIncidents (req, res) {
+    const { line_id, status } = req.query
+
+    if (status && line_id) {
+      const incidents = await IncidentModel.getIncidentByLineId(line_id)
+      const filtetredIncidents = incidents.filter(incident => incident.type === type)
+
+      return res.json(filtetredIncidents)
+    }
+
     const Incidents = await IncidentModel.getAllIncidents()
     res.json(Incidents)
   }
@@ -32,9 +41,9 @@ export class IncidentController {
     if (!result.success) res.status(400).json({ message: JSON.parse(result.error) })
 
     const { id } = req.params
-    const incidentUpdated = await IncidentModel.updateIncident(id, result.data)
-    if (!incidentUpdated) return res.status(404).json({ message: 'Incident not found' })
-    return res.json(incidentUpdated)
+    const incidentResolved = await IncidentModel.updateIncident(id, result.data)
+    if (!incidentResolved) return res.status(404).json({ message: 'Incident not found' })
+    return res.json(incidentResolved)
   }
 
   static async deleteIncident (req, res) {
@@ -45,5 +54,12 @@ export class IncidentController {
     if (!incidentDeleted) return res.status(404).json({ message: 'Incident not found' })
 
     return res.json(incidentDeleted)
+  }
+
+  static async resolveIncident (req, res) {
+    const { id } = req.params
+    const incidentResolved = await IncidentModel.updateIncident(id, { status: 'resolved' })
+    if (!incidentResolved) return res.status(404).json({ message: 'Incident not found' })
+    return res.json(incidentResolved)
   }
 }

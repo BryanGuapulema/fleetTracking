@@ -11,6 +11,11 @@ const IncidentSchema = new Schema({
     ref: 'Vehicle',
     required: true
   },
+  status: {
+    type: String,
+    enum: ['active', 'resolved', 'pending'],
+    default: 'active'
+  },
   type: {
     type: String,
     enum: ['delay', 'breakdown', 'maintenance', 'accident'],
