@@ -25,3 +25,6 @@ Content-Type: application/json
 
 ###DELETE schedule BY ID
 DELETE  http://localhost:8000/api/schedules/68ca1f77f81a1b21844fba6
+
+###GET ALL scheduleS for stations
+GET http://localhost:8000/api/schedules?station_id=68c78c8ed78fec1303790606

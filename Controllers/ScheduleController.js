@@ -1,16 +1,32 @@
 import { ScheduleModel } from '../models/ScheduleModel.js'
+import { Schedule } from '../Schemas/scheduleSchema.js'
 import { validatePartialSchedule, validateSchedule } from '../validations/ScheduleValidation.js'
 
 export class ScheduleController {
   static async getAllSchedules (req, res) {
+    const { station_id } = req.query
+
+    if (station_id) {
+      const schedules = await ScheduleModel.getSchedulesforStation(station_id)
+      const schedulesFormated = schedules.map(schedule => {
+        return {
+          id: schedule.id,
+          line: schedule.line_id.name,
+          departure_time: schedule.departure_time
+        }
+      })
+
+      return res.json(schedulesFormated)
+    }
+
     const schedules = await ScheduleModel.getAllSchedules()
-    res.json(schedules)
+    return res.json(schedules)
   }
 
   static async createSchedule (req, res) {
     const result = validateSchedule(req.body)
 
-    if (!result.success) res.status(400).json({ message: JSON.parse(result.error) })
+    if (!result.success) return res.status(400).json({ message: JSON.parse(result.error) })
 
     const newSchedule = await ScheduleModel.createSchedule(result.data)
     return res.status(201).json(newSchedule)
