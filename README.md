@@ -116,7 +116,7 @@ El proyecto está diseñado para **backend**, usando Node.js + TypeScript y Post
 ## Endpoints principales
 
 ### Auth
-- `POST /api/auth/login` → obtener JWT  
+- `POST /api/auth/login` → obtener JWT  ✅
 - `POST /api/auth/refresh` → refrescar token  
 
 ### Líneas
