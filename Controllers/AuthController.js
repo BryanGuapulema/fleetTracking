@@ -50,28 +50,75 @@ export class AuthController {
       const isValidPassword = await bcrypt.compare(password, user.password)
       if (!isValidPassword) return res.status(400).json({ error: 'password is invalid' })
 
-      // JWT creation
-      const token = jwt.sign(
+      // JWT access token creation
+      const accessToken = jwt.sign(
         { id: user._id, username: user.username, role: user.role },
         JWT_SECRET,
         {
           expiresIn: JWT_EXPIRES_IN
         })
 
+      // JWT refresh token creation
+      const refreshToken = jwt.sign(
+        { id: user._id, username: user.username },
+        JWT_SECRET,
+        { expiresIn: '7d' }
+      )
+
       // jwt sent by a cookie
-      res.cookie('access_token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: 1000 * 60 * 60
-      }).json(user)
+      res
+        .cookie('access_token', accessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
+          maxAge: 1000 * 60 * 60 // 1h
+        })
+        .cookie('refresh_token', refreshToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
+          maxAge: 1000 * 60 * 60 * 24 * 7 // 7d
+        })
+        .json(user)
     } catch (error) {
       res.status(400).json({ error: error.message })
     }
   }
 
   static async logout (req, res) {
-    res.clearCookie('access_token').json({ message: 'Log out succesful' })
+    res
+      .clearCookie('access_token')
+      .clearCookie('refresh_token')
+      .json({ message: 'Log out succesful' })
+  }
+
+  static async refresh (req, res) {
+    try {
+      const refreshToken = req.cookies.refresh_token
+      if (!refreshToken) {
+        return res.status(401).json({ error: 'No refresh token provided' })
+      }
+
+      jwt.verify(refreshToken, JWT_SECRET, (err, decoded) => {
+        if (err) return res.status(403).json({ error: 'Invalid or expired refresh token' })
+
+        // new access token
+        const newAccessToken = jwt.sign(
+          { id: decoded.id, username: decoded.username, role: decoded.role },
+          JWT_SECRET,
+          { expiresIn: JWT_EXPIRES_IN }
+        )
+
+        res.cookie('access_token', newAccessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
+          maxAge: 1000 * 60 * 60 // 1h
+        }).json({ access_token: newAccessToken })
+      })
+    } catch (error) {
+      res.status(500).json({ error: error.message })
+    }
   }
 
   static async me (req, res) {
